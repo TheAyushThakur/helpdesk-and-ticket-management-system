@@ -7,6 +7,7 @@ from .serializers import TicketSerializer
 
 class TicketViewSet(viewsets.ModelViewSet):
     serializer_class = TicketSerializer
+    queryset = Ticket.objects.all() 
     filter_backends = [DjangoFilterBackend]
     filterset_fields = ['title', 'status', 'priority', 'assigned_to']
 
@@ -15,7 +16,7 @@ class TicketViewSet(viewsets.ModelViewSet):
         if user.is_superuser:
             return Ticket.objects.all()    
         profile = user.profile
-        if profile.role == 'Agent':
+        if profile.role == 'agent':
             return Ticket.objects.filter(assigned_to = user)
         return Ticket.objects.filter(created_by = user)
     
