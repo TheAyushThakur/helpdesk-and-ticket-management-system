@@ -14,3 +14,17 @@ class TicketSerializer(serializers.ModelSerializer):
     class Meta:
         model = Ticket
         fields = '__all__'
+
+class RegisterSerializer(serializers.ModelSerializer):
+    password= serializers.CharField(write_only= True)
+    class meta:
+        model = User
+        fields= ['username', 'email', 'password']
+
+    def create(self, validated_data):
+        user = User.objects.create_user(
+            username= validated_data['username'],
+            email= validated_data.get('email'),
+            password= validated_data['password']
+        )
+        return user
