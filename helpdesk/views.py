@@ -32,7 +32,7 @@ class TicketViewSet(viewsets.ModelViewSet):
 
     def perform_update(self, serializer):
         user = self.request.user
-        
+
         if 'assigned_to' in serializer.validated_data and not user.is_superuser:
             serializer.validated_data.pop('assigned_to')
         serializer.save()
@@ -76,6 +76,7 @@ class LogoutView(APIView):
 
 class CommentViewSet(viewsets.ModelViewSet):
     serializer_class = CommentSerializer
+    queryset = Comment.objects.all()
 
     def get_queryset(self):
         user = self.request.user
