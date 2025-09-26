@@ -11,7 +11,7 @@ A Django + DRF project implementing a **Helpdesk / Ticket Management** system wi
 
 ---
 
-## ⚙️ Tech Stack
+##  Tech Stack
 - Python 3.10+
 - Django 4.x / 5.x
 - Django REST Framework
@@ -21,7 +21,7 @@ A Django + DRF project implementing a **Helpdesk / Ticket Management** system wi
 
 ---
 
-## 🚀 Setup Instructions (Step by Step)
+##  Setup Instructions (Step by Step)
 ```bash
 ### 1. Clone the repository
 git clone <your-repo-url> helpdesk_project
