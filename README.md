@@ -63,7 +63,7 @@ Open a new terminal, activate venv, then run:
 celery -A config worker -l info -P solo
 # Linux/macOS
 celery -A config worker -l info
-```
+
 ## Testing Escalation & Email Alerts
 
 Create a ticket (status=open, priority=high) via API or admin.
