@@ -123,5 +123,5 @@ Returns stats for last 7 days:
 }
 
 ### Docs
-Swagger → /swagger/.
-Admin → /admin/.
+Swagger → /swagger/
+Admin → /admin/
