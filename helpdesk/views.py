@@ -8,6 +8,9 @@ from rest_framework.views import APIView
 from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi
 from rest_framework.exceptions import PermissionDenied
+from django.utils import timezone
+from datetime import timedelta
+from rest_framework.permissions import IsAdminUser
 
 # Create your views here.
 
@@ -102,3 +105,21 @@ class CommentViewSet(viewsets.ModelViewSet):
 
     def perform_create(self, serializer):
         serializer.save(author=self.request.user)
+
+
+class ReportView(APIView):
+    permission_classes= [IsAdminUser]
+    def get(self, request):
+        now= timezone.now()
+        last_7_days=  now - timedelta(days=7)
+
+        opened = Ticket.objects.filter(created_at__gte= last_7_days).count()
+        resolved = Ticket.objects.filter(status="resolved",updated_at__gte= last_7_days).count()
+        escalated = Ticket.objects.filter(status="escalated", updated_at__gte= last_7_days).count()
+
+        return Response({
+            "tickets_opened_in_last_7_days": opened,
+            "tickets_resolved_in_last_7_days": resolved,
+            "tickets_escalated_in_last_7_days": escalated
+        })
+
