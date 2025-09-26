@@ -30,6 +30,13 @@ class TicketViewSet(viewsets.ModelViewSet):
     def perform_create(self, serializer):
         serializer.save(created_by =self.request.user)
 
+    def perform_update(self, serializer):
+        user = self.request.user
+        
+        if 'assigned_to' in serializer.validated_data and not user.is_superuser:
+            serializer.validated_data.pop('assigned_to')
+        serializer.save()
+
 ######Register######
 class RegisterView(generics.CreateAPIView):
     serializer_class= RegisterSerializer
