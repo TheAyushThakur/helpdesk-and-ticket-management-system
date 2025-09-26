@@ -1,11 +1,13 @@
 from rest_framework import viewsets, permissions, generics
 from django_filters.rest_framework import DjangoFilterBackend
-from .models import Ticket
-from .serializers import TicketSerializer, RegisterSerializer, UserSerializer, LoginSerializer
+from .models import Ticket, Comment
+from .serializers import TicketSerializer, RegisterSerializer, UserSerializer, LoginSerializer, CommentSerializer
 from django.contrib.auth import authenticate, login, logout
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from drf_yasg.utils import swagger_auto_schema
+from drf_yasg import openapi
+from rest_framework.exceptions import PermissionDenied
 
 # Create your views here.
 
@@ -63,8 +65,32 @@ class LogoutView(APIView):
         return Response({"message": "Logged out Succesfully"})
     
 
+######Comment######
 
+class CommentViewSet(viewsets.ModelViewSet):
+    serializer_class = CommentSerializer
 
+    def get_queryset(self):
+        user = self.request.user
+        if user.is_superuser:
+            return Comment.objects.all()
+        if user.profile.role == "agent":
+            return Comment.objects.filter(ticket__assigned_to=user)
+        return Comment.objects.filter(ticket__created_by=user)
 
-        
+    @swagger_auto_schema(
+        request_body=CommentSerializer,
+        responses={
+            201: openapi.Response("Comment created successfully", CommentSerializer),
+            400: "Invalid data"
+        }
+    )
+    def create(self, request, *args, **kwargs):
+        """Create a new comment on a ticket (agents only)"""
+        user = request.user
+        if user.profile.role != "agent":
+            raise PermissionDenied("Only agents can add comments/updates.")
+        return super().create(request, *args, **kwargs)
 
+    def perform_create(self, serializer):
+        serializer.save(author=self.request.user)

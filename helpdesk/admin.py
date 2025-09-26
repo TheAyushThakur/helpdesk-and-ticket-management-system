@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Profile, Ticket
+from .models import Profile, Ticket, Comment
 # Register your models here.
 
 @admin.register(Profile)
@@ -12,3 +12,9 @@ class TicketAdmin(admin.ModelAdmin):
     list_display= ('title', 'status', 'priority', 'created_by', 'assigned_to', 'created_at')
     list_filter = ('priority', 'status')
     search_fields = ('title', 'priority', 'status', 'assigned_to')
+
+@admin.register(Comment)
+class CommentAdmin(admin.ModelAdmin):
+    list_display=('ticket', 'author', 'comment', 'created_at')
+    list_filter= ('created_at',)
+    search_fields=('comment',)

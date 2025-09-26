@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from django.contrib.auth.models import User
-from .models import Ticket, Profile
+from .models import Ticket, Profile, Comment
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
@@ -32,3 +32,11 @@ class RegisterSerializer(serializers.ModelSerializer):
 class LoginSerializer(serializers.Serializer):
     username =serializers.CharField()
     password= serializers.CharField(write_only=True)
+
+class CommentSerializer(serializers.ModelSerializer):
+    author = serializers.StringRelatedField(read_only=True)
+
+    class Meta:
+        model = Comment
+        fields = ['id', 'ticket', 'author', 'text', 'created_at']
+        read_only_fields = ['author', 'created_at']
