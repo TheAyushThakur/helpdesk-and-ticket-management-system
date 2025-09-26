@@ -22,9 +22,8 @@ A Django + DRF project implementing a **Helpdesk / Ticket Management** system wi
 ---
 
 ## 🚀 Setup Instructions (Step by Step)
-
-### 1. Clone the repository
 ```bash
+### 1. Clone the repository
 git clone <your-repo-url> helpdesk_project
 cd helpdesk_project
 
