@@ -16,8 +16,11 @@ class CommentSerializer(serializers.ModelSerializer):
 
 class TicketSerializer(serializers.ModelSerializer):
     comments = CommentSerializer(many=True, read_only=True)
-    created_by = UserSerializer(read_only= True)
-    assigned_to = UserSerializer(read_only = True)
+    created_by = serializers.StringRelatedField(read_only=True)
+    assigned_to = serializers.StringRelatedField(read_only=True)
+
+    created_by_id = serializers.IntegerField(write_only=True, required=False)
+    assigned_to_id = serializers.IntegerField(write_only=True, required=False)
 
     class Meta:
         model = Ticket
